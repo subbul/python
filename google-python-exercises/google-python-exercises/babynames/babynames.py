@@ -41,6 +41,32 @@ def extract_names(filename):
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
   # +++your code here+++
+  import sys
+  import re
+  fp = open(filename,'r')
+  fileContent = fp.read()
+  match = re.search('Popularity in \d\d\d\d',fileContent )
+  #print match.group()
+
+  YearSplit = match.group().split(' ')
+  print YearSplit[2]
+  list = [];
+  list.append(YearSplit[2])
+  ranklist = re.findall(r'<tr align="right"><td>\d+</td><td>\w+</td><td>\w+</td>',fileContent )
+  dict = {};
+  for iter in ranklist:
+    firstsplit = iter.split('<td>')
+    Rank = (firstsplit[1].split('</td>'))[0]
+    FirstName = (firstsplit[2].split('</td>'))[0]
+    SecondName = (firstsplit[3].split('</td>'))[0]
+    dict[FirstName] = Rank;
+    #print FirstName,SecondName,Rank
+
+  for key in sorted(dict.keys()):
+    result_string = key+' '+dict[key]
+    list.append(result_string)
+
+  print list  
   return
 
 
@@ -59,7 +85,8 @@ def main():
   if args[0] == '--summaryfile':
     summary = True
     del args[0]
-
+  print args[0]
+  extract_names(args[0])
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
